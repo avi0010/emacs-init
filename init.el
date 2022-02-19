@@ -1,5 +1,5 @@
 ;; Initialize package sources
-(defvar efs/frame-transparency '(95 . 95))
+(defvar efs/frame-transparency '(98 . 98))
 (setq gc-cons-threshold (* 90 1000 1000))
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -53,7 +53,8 @@
 ;; Set up the visible bell
 (setq visible-bell t)
 (column-number-mode)
-(global-display-line-numbers-mode t)
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative)
 (set-face-attribute 'default nil :font "Cascadia Mono" :height 120)
 
 (dolist (mode '(org-mode-hook
@@ -67,14 +68,17 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (use-package doom-themes
-  :init (load-theme 'doom-tokyo-night t))
+  :init (load-theme 'doom-horizon t))
 
 (use-package all-the-icons
   :defer 0)
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+  :custom ((doom-modeline-height 15)
+	   (doom-modeline-lsp t)
+	   (doom-modeline-hud nil)
+	   (doom-modeline-project-detection 'auto)))
 
 (use-package rainbow-delimiters
   :defer 0
@@ -259,7 +263,9 @@
 
 (defun avi/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
+  (lsp-headerline-breadcrumb-mode)
+  (setq lsp-modeline-code-actions-enable t))
+
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -274,10 +280,10 @@
   :hook (lsp-mode . lsp-ui-mode)
   :custom
   (lsp-ui-doc-position 'bottom))
-
 (use-package lsp-treemacs
   :after lsp)
 
+(lsp-treemacs-sync-mode 1)
 (use-package lsp-ivy
   :after lsp)
 
@@ -320,7 +326,7 @@
   :defer 0)
 (add-hook 'js2-mode-hook 'prettier-js-mode)
 
-(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . js2-mode))
 (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 4)))
 (setq lsp-tailwindcss-add-on-mode t)
 (use-package lsp-tailwindcss
@@ -400,6 +406,16 @@
 (add-hook 'org-mode-hook 'ac-ispell-ac-setup)
 (setq show-paren-mode t)
 
+(require 'lsp-latex)
+;; "texlab" must be located at a directory contained in `exec-path'.
+;; If you want to put "texlab" somewhere else,
+;; you can specify the path to "texlab" as follows:
+;; (setq lsp-latex-texlab-executable "/path/to/texlab")
+
+(with-eval-after-load "tex-mode"
+ (add-hook 'tex-mode-hook 'lsp)
+ (add-hook 'latex-mode-hook 'lsp))
+
 (setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -408,7 +424,7 @@
  ;; If there is more than one, they won't work right.
  '(org-babel-C++-compiler "clang++")
  '(package-selected-packages
-   '(highlight-parentheses ac-ispell pdf-tools yaml-mode go-mode auctex prettier-js tagedit rjsx-mode vterm lsp-jedi lsp-mode which-key use-package rainbow-delimiters org-super-agenda no-littering magit ivy-rich ivy-prescient helpful general evil-collection doom-themes doom-modeline dashboard counsel-projectile)))
+   '(lsp-latex highlight-parentheses ac-ispell pdf-tools yaml-mode go-mode auctex prettier-js tagedit rjsx-mode vterm lsp-jedi lsp-mode which-key use-package rainbow-delimiters org-super-agenda no-littering magit ivy-rich ivy-prescient helpful general evil-collection doom-themes doom-modeline dashboard counsel-projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
