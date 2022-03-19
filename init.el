@@ -1,5 +1,5 @@
-;; Initialize package sources
-(defvar efs/frame-transparency '(98 . 98))
+
+(defvar efs/frame-transparency '(100 . 100))
 (setq gc-cons-threshold (* 90 1000 1000))
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -33,7 +33,7 @@
                         (projects . 3)
                         (agenda . 5)))
   (setq dashboard-centre-content t)
-  (setq dashboard-startup-banner "~/Downloads/skull2.png")
+  (setq dashboard-startup-banner "~/Documents/emacs.png")
   (setq dashboard-week-agenda nil)
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
@@ -56,7 +56,7 @@
 (column-number-mode)
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers-type 'relative)
-(set-face-attribute 'default nil :font "Cascadia Mono" :height 120)
+(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 120)
 
 (dolist (mode '(org-mode-hook
                 term-mode-hook
@@ -69,17 +69,81 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (use-package doom-themes
-  :init (load-theme 'doom-horizon t))
+  :init (load-theme 'acid t))
 
 (use-package all-the-icons
   :defer 0)
 
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)
-	   (doom-modeline-lsp t)
-	   (doom-modeline-hud nil)
-	   (doom-modeline-project-detection 'auto)))
+(defun mode-line-fill (face reserve)
+  "Return empty space using FACE and leaving RESERVE space on the right."
+      (when
+          (and window-system (eq 'right (get-scroll-bar-mode)))
+      (setq reserve (- reserve 3)))
+      (propertize " "
+        'display
+                      `((space :align-to (- (+ right right-fringe right-margin) ,reserve)))
+                      'face face
+                      )
+          )
+
+        (use-package nyan-mode
+          :config
+          (setq nyan-bar-length 15)
+          )
+        (require 'nyan-mode)
+
+        ;;;(let (sndr-font-base (cdr (assoc "zenbu-salmon" zenbu-colors-alist)) )
+        ;; ■◧  ▥
+
+        (defun get-evil-state-icons()
+          (interactive)
+          (cond
+           ((memq evil-state '(emacs))
+            (propertize "⭘ ⭘" 'face '((:foreground "orange" :weight bold )))
+            )
+
+           ((memq evil-state '(hybrid insert))
+            (propertize " " 'face '((:foreground "green" :weight bold )))
+            )
+
+           ((memq evil-state '(visual))
+            (propertize "⭘ ⭘" 'face '((:foreground "red" :weight bold )))
+            )
+
+           (t
+            (propertize "⭘ ⭘" 'face '((:weight ultra-light )))
+            )
+           )
+          )
+
+        (setq-default mode-line-format
+                      (list
+                       " "
+                       '(:eval (get-evil-state-icons) );; end evil-state
+                       " "
+                       '(:eval (when buffer-read-only
+                                 (propertize " " 'help-echo "Buffer is read-only")))
+                       '(:eval
+                         (if (buffer-modified-p)
+                             (propertize " %b " 'face '((:weight bold )) 'help-echo (buffer-file-name) )
+                           (propertize "%b " 'help-echo (buffer-file-name))
+                           ))
+                       (propertize " · " 'face 'font-lock-type-face)
+                       ;; '%02' to set to 2 chars at least; prevents flickering
+                       (propertize "%02l, %02c" 'face 'font-lock-type-face)
+                       ;; the current major mode for the buffer.
+                       (propertize " · %m ·" 'face 'font-lock-type-face)
+                       mode-line-misc-info
+                       (propertize " · " 'face 'font-lock-type-face)
+                       (mode-line-fill 'mode-line 30)
+                       (propertize " · " 'face 'font-lock-type-face)
+                       '(:eval (list (nyan-create)))
+                       (propertize " · " 'face 'font-lock-type-face)
+                       '(:eval (if-let (vc vc-mode)
+                                   (list "  " (substring vc 5))
+                                 (list "        " )
+                                 ))
+                       ))
 
 (use-package rainbow-delimiters
   :defer 0
@@ -225,7 +289,7 @@
                   (org-level-6 . 1)
                   (org-level-7 . 1.1)
                   (org-level-8 . 1)))
-    (set-face-attribute (car face) nil :font "CascadiaMono" :height (cdr face))))
+    (set-face-attribute (car face) nil :font "JetBrainsMono Nerd Font" :height (cdr face))))
 
 (use-package org
   :defer 0
@@ -528,6 +592,11 @@
   :after (treemacs)
   :ensure t
   :config (treemacs-set-scope-type 'Tabs))
+
+(use-package autothemer
+  :ensure t)
+(use-package rainbow-mode
+  :ensure t)
 (setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -536,7 +605,7 @@
  ;; If there is more than one, they won't work right.
  '(org-babel-C++-compiler "clang++")
  '(package-selected-packages
-   '(treemacs-all-the-icons treemacs-magit treemacs-projectile neotree minimap beacon lsp-latex highlight-parentheses ac-ispell pdf-tools yaml-mode go-mode auctex prettier-js tagedit rjsx-mode vterm lsp-jedi lsp-mode which-key use-package rainbow-delimiters org-super-agenda no-littering magit ivy-rich ivy-prescient helpful general evil-collection doom-themes doom-modeline dashboard counsel-projectile)))
+   '(rainbow-mode doom-modeline autothemer treemacs-all-the-icons treemacs-magit treemacs-projectile neotree minimap beacon lsp-latex highlight-parentheses ac-ispell pdf-tools yaml-mode go-mode auctex prettier-js tagedit rjsx-mode vterm lsp-jedi lsp-mode which-key use-package rainbow-delimiters org-super-agenda no-littering magit ivy-rich ivy-prescient helpful general evil-collection doom-themes dashboard counsel-projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
