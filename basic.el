@@ -43,7 +43,7 @@
 
 (use-package doom-themes
   :defer 0
-  :init (load-theme 'acid t))
+  :init (load-theme 'doom-nord t))
 
 (use-package all-the-icons
   :defer 0)

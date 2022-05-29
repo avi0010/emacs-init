@@ -2,21 +2,20 @@
 (setq gc-cons-threshold (* 90 1000 1000))
 (load "~/.emacs.d/setup.el")
 (load "~/.emacs.d/basic.el")
+(load "~/.emacs.d/org.el")
 (load "~/.emacs.d/neotree.el")
 (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
 (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
 (load "~/.emacs.d/keybindings.el")
-;; (load "~/.emacs.d/lsp.el")
-;; (load "~/.emacs.d/python.el")
 (load "~/.emacs.d/modeline.el")
-;; (load "~/.emacs.d/rust.el")
-;; (load "~.emacs.d/dap.el")
 (setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("1704976a1797342a1b4ea7a75bdbb3be1569f4619134341bd5a4c1cfb16abad4" default))
  '(git-gutter:added-sign " ")
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
