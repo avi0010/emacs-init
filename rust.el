@@ -3,10 +3,11 @@
 (setq lsp-rust-analyzer-display-chaining-hints t)
 (setq lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
 (setq lsp-rust-analyzer-display-closure-return-type-hints t)
-(setq lsp-rust-analyzer-display-parameter-hints nil)
+(setq lsp-rust-analyzer-display-parameter-hints t)
 (setq lsp-rust-analyzer-display-reborrow-hints nil)
 
 (use-package rustic
+  :defer 0
   :ensure t
   :bind (:map rustic-mode-map
               ("M-j" . lsp-ui-imenu)

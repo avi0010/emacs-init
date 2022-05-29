@@ -13,18 +13,18 @@
                   (org-level-2 . 1.5)
                   (org-level-3 . 1.2)
                   (org-level-4 . 1)))
-    (set-face-attribute (car face) nil :font "JetBrainsMono Nerd Font" :height (cdr face))))
-
+  (set-face-attribute (car face) nil :font "JetBrainsMono Nerd Font" :height (cdr face))))
 (use-package org
   :defer 0
   :hook (org-mode . avi/org-mode-setup)
   :config
-  (setq org-ellipsis " *")
+  (setq org-ellipsis "**")
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-agenda-files '("~/Emacs/Tasks/Tasks.org"))
   (avi/org-font-setup))
+
 (use-package org-super-agenda
   :after org
   :config
@@ -32,6 +32,11 @@
 
 (setq org-confirm-babel-evaluate nil)
 
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
@@ -52,6 +57,7 @@
 
 
 (use-package org-roam
+  :defer 0
   :init
   (setq org-mode-v2-ack t)
   :custom
@@ -64,7 +70,8 @@
   (org-roam-setup))
 
 (use-package websocket
-    :after org-roam)
+  :defer 0
+  :after org-roam)
 
 (use-package org-roam-ui
     :after org-roam
@@ -74,3 +81,10 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+(defun efs/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . efs/org-mode-visual-fill))

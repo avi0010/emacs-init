@@ -4,6 +4,7 @@
 
 
 (use-package lsp-mode
+  :defer 0
   :commands (lsp lsp-deferred)
   :hook (lsp-mode . avi/lsp-mode-setup)
   :init
@@ -52,12 +53,14 @@
 (add-hook 'c++-mode-hook 'lsp)
 (add-hook 'go-mode-hook 'lsp)
 (use-package yasnippet
+  :defer 0
   :ensure
   :config
   (yas-reload-all)
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode))
 (use-package flycheck
+  :defer 0
   :ensure t)
 (add-hook 'go-mode-hook
           (lambda ()

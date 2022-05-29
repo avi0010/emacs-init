@@ -1,5 +1,6 @@
 (setq python-shell-interpreter "~/.pyenv/versions/3.10.1/bin/python")
 (use-package lsp-pyright
+  :defer 0
   :ensure t
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
@@ -13,6 +14,7 @@
      (tagedit-add-paredit-like-keybindings)
      (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
 (use-package pyvenv
+  :defer 0
   :ensure t
   :init
   (setenv "~/.pyenv/versions"))

@@ -45,18 +45,6 @@
   :config
   (ivy-prescient-mode 1))
 
-(use-package helpful
-  :defer 1
-  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
-
 (defun save-all () (interactive) (save-some-buffers t))
 (use-package general
   :after evil
@@ -70,6 +58,7 @@
     "t"  '(:ignore t :which-key "toggles")
     "tt" '(counsel-load-theme :which-key "choose theme")
     "." '(counsel-find-file :which-key "Find File")
+    ;; Buffers
     "bb" '(counsel-switch-buffer :which-key "List Buffers")
     "bt" '(counsel-switch-to-shell-buffer :which-key "shell buffer")
     "bs" '(save-buffer :which-key "save Buffer")
@@ -77,6 +66,10 @@
     "bn" '(next-buffer :which-key "next-buffer")
     "bk" '(kill-current-buffer :which-key "kill current buffer") 
     "bS" ' (save-all :which-key "save all Buffers")
+    ;; Org Mode
+    "o"  '(:which-key "Org mode")
+    "oa" '(org-agenda-list :which-key "Org TODO list")
+    "os" '(org-schedule :which-key "Org schedule")
     ))
 
 (use-package evil
@@ -119,7 +112,8 @@
   :config
   (evil-collection-init))
 
-(use-package magit)
+(use-package magit
+  :defer 0)
 
 (use-package dired
   :after evil
@@ -133,9 +127,11 @@
     "l" 'dired-single-buffer))
 
 (use-package dired-single
+  :defer 0
   :after dired)
 
 (use-package all-the-icons-dired
+  :defer 0
   :after dired
   :hook (dired-mode . all-the-icons-dired-mode))
 

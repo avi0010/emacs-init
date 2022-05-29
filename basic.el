@@ -26,7 +26,7 @@
 (column-number-mode)
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers-type 'relative)
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 120)
+(set-face-attribute 'default nil :font "Source Code Pro" :height 120)
 
 (use-package no-littering)
 
@@ -42,6 +42,7 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (use-package doom-themes
+  :defer 0
   :init (load-theme 'acid t))
 
 (use-package all-the-icons
@@ -53,7 +54,17 @@
 (use-package autothemer
   :ensure t)
 (use-package rainbow-mode
+  :defer 0
   :ensure t)
 
+(require 'git-gutter)
+(global-git-gutter-mode t)
+(custom-set-variables
+ '(git-gutter:window-width 1)
+ '(git-gutter:modified-sign " ")
+ '(git-gutter:added-sign " ")
+ '(git-gutter:deleted-sign " "))
 
-(beacon-mode 1)
+(set-face-background 'git-gutter:modified "#ffff00") ;; background color
+(set-face-background 'git-gutter:added "#98fb98")
+(set-face-background 'git-gutter:deleted "#ff4500")
